@@ -5,4 +5,6 @@ def binToDec(binVal):
 
 def decToBin(dec, length):
 	binVal = bin(dec)[2:]
+	if(len(binVal) > length):
+		return binVal[-length:]
 	return "0" * (length - len(binVal)) + binVal
