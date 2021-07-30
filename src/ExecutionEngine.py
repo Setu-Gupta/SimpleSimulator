@@ -40,7 +40,11 @@ class ExecutionEngine:
 			self.registerFile.setFlag("V")
 
 	def handleMovImm(self, inst):
-		pass
+		reg1 = binAndDec(inst[5:8])
+		imm = binAndDec(inst[8:])
+
+		self.registerFile.update(reg1, imm)
+		self.registerFile.resetAllFLags()
 
 	def handleMovReg(self, inst):
 		pass
@@ -69,10 +73,23 @@ class ExecutionEngine:
 		pass
 
 	def handleRs(self, inst):
-		pass
+		reg1 = binAndDec(inst[5:8])
+		imm = binAndDec(inst[8:])
+
+		reg1Val = self.registerFile.fetch(reg1)
+		reg1Val >>= imm
+		self.registerFile.update(reg1, reg1Val)
+		self.registerFile.resetAllFLags()
 
 	def handleLs(self, inst):
-		pass
+		reg1 = binAndDec(inst[5:8])
+		imm = binAndDec(inst[8:])
+
+		reg1Val = self.registerFile.fetch(reg1)
+		reg1Val <<= imm
+		self.registerFile.update(reg1, reg1Val)
+		self.registerFile.resetAllFLags()
+
 
 	def handleXor(self, inst):
 		reg1 = binAndDec(inst[7:10])
