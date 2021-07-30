@@ -12,7 +12,8 @@ class ProgramCounter:
 		return self.count
 
 	def update(self, nextPC):
-		self.count = nextPC.count
+		if nextPC:
+			self.count = nextPC.count
 
 	def dump(self):
 		print(decToBin(self.count, 8) + " ", end="")
