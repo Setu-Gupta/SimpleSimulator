@@ -30,6 +30,10 @@ class Memory:
 		self.trace.append([cycle, addr])
 		return self.mem[addr]
 
+	def store(self, addr, data, cycle):
+		self.trace.append([cycle, addr])
+		self.mem[addr] = data
+
 	def dump(self):
 		for m in self.mem:
 			print(m)
