@@ -48,7 +48,11 @@ class Memory:
 		plt.scatter(x, y)
 		plt.autoscale(enable=True, axis='both', tight=True)
 		
-		plt.ylim([0, 255])
-		plt.yticks([10*i for i in range(26)])
+		if(max(y) > 25):
+			yNumTicks = 25
+			yStepSize = max(y) // yNumTicks
+			plt.yticks([yStepSize*i for i in range(yNumTicks+1)])
+		else:
+			plt.yticks([i for i in range(max(y)+1)])
 		plt.xlim(0)
 		plt.savefig("pattern.png")

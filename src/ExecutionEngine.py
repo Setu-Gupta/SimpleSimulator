@@ -55,11 +55,24 @@ class ExecutionEngine:
 		self.registerFile.update(reg1, reg2Val)
 		self.registerFile.resetAllFlags()
 	
-	def handleLd(self, inst):
-		pass
+	def handleLd(self, inst, cycle):
+		reg1 = binToDec(inst[5:8])
+		addr = binToDec(inst[8:])
 
-	def handleSt(self, inst):
-		pass
+		reg1Val = self.memory.fetch(addr, cycle)
+
+		self.registerFile.update(reg1, reg1Val)
+		self.registerFile.resetAllFlags()
+
+	def handleSt(self, inst, cycle):
+		reg1 = binToDec(inst[5:8])
+		addr = binToDec(inst[8:])
+
+		reg1Val = self.registerFile.fetch(reg1)
+		reg1ValBin = decToBin(reg1Val, 16)
+
+		self.memory.store(addr, reg1ValBin, cycle)
+		self.registerFile.resetAllFlags()
 
 	def handleMul(self, inst):
 		reg1 = binToDec(inst[7:10])
@@ -76,7 +89,18 @@ class ExecutionEngine:
 			self.registerFile.setFlag("V")
 
 	def handleDiv(self, inst):
-		pass
+		reg1 = binToDec(inst[10:13])
+		reg2 = binToDec(inst[13:])
+
+		reg1Val = self.registerFile.fetch(reg1)
+		reg2Val = self.registerFile.fetch(reg2)
+
+		quotient = reg1Val // reg2Val
+		remainder = reg1Val % reg2Val
+
+		self.registerFile.update(0, quotient)
+		self.registerFile.update(1, remainder)
+		self.registerFile.resetAllFlags()
 
 	def handleRs(self, inst):
 		reg1 = binToDec(inst[5:8])
@@ -145,7 +169,7 @@ class ExecutionEngine:
 
 		self.registerFile.update(reg1, reg1Val)
 		self.registerFile.resetAllFlags()
-		
+
 	def handleCmp(self, inst):
 		reg1 = binToDec(inst[10:13])
 		reg2 = binToDec(inst[13:])
@@ -162,21 +186,45 @@ class ExecutionEngine:
 			self.registerFile.setFlag("L")
 
 	def handleJmp(self, inst):
-		pass
+		addr = binToDec(inst[8:])
+
+		self.registerFile.resetAllFlags()
+		return ProgramCounter(addr)
 
 	def handleJlt(self, inst):
-		pass
+		addr = binToDec(inst[8:])
+
+		newPC = None
+		if(self.registerFile.isFlagSet("L")):
+			newPC = ProgramCounter(addr)
+
+		self.registerFile.resetAllFlags()
+		return newPC
 
 	def handleJgt(self, inst):
-		pass
+		addr = binToDec(inst[8:])
+
+		newPC = None
+		if(self.registerFile.isFlagSet("G")):
+			newPC = ProgramCounter(addr)
+
+		self.registerFile.resetAllFlags()
+		return newPC
+
 
 	def handleJe(self, inst):
-		pass
+		addr = binToDec(inst[8:])
 
+		newPC = None
+		if(self.registerFile.isFlagSet("E")):
+			newPC = ProgramCounter(addr)
+
+		self.registerFile.resetAllFlags()
+		return newPC
 
 	def execute(self, inst, cycle):
 		opcode = inst[:5]
-		halted = True
+		halted = False
 		newPC = None
 		
 		if opcode == "00000": # add reg reg reg
@@ -188,9 +236,9 @@ class ExecutionEngine:
 		elif opcode == "00011": # mov reg reg
 			self.handleMovReg(inst)
 		elif opcode == "00100": # ld reg mem_addr
-			self.handleLd(inst)
+			self.handleLd(inst, cycle)
 		elif opcode == "00101": # st reg mem_addr
-			self.handleSt(inst)
+			self.handleSt(inst, cycle)
 		elif opcode == "00110": # mul reg reg reg
 			self.handleMul(inst)
 		elif opcode == "00111": # div reg reg

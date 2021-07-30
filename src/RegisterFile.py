@@ -15,7 +15,7 @@ class RegisterFile:
 	def update(self, regNo, newVal):
 		self.data[regNo] = newVal
 
-	def getFlagIdx(self):
+	def getFlagIdx(self, flag):
 		idx = 100
 
 		if flag == "V":
