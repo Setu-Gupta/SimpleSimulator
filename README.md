@@ -1,6 +1,9 @@
 # SimpleSimulator
 A Simple simulator for a custom ISA
 
+## Dependencies
+The trace graph generator depends on `matplotlib`.
+
 ## How to run
 Execute the `run` file. Pass the binary via `stdin`. The output is written to `stdout`:
 

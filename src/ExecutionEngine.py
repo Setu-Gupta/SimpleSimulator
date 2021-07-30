@@ -11,5 +11,5 @@ class ExecutionEngine:
 		self.memory = mem
 		self.registerFile = rf
 
-	def execute(self, inst):
+	def execute(self, inst, cycle):
 		return True, ProgramCounter(0)

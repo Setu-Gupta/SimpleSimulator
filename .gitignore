@@ -132,3 +132,4 @@ dmypy.json
 gen*
 tmp*
 temp*
+*.png

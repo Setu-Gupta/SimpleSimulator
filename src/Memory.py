@@ -3,10 +3,12 @@
 import sys
 import re
 from utils.colors import bcolors
+import matplotlib.pyplot as plt
 
 class Memory:
 
 	mem = []
+	trace = []
 
 	def __init__(self):
 		for line in sys.stdin:
@@ -24,9 +26,25 @@ class Memory:
 			defaultValue = "0"*16
 			self.mem = self.mem + [defaultValue]*(256 - len(self.mem))
 
-	def fetch(self, addr):
+	def fetch(self, addr, cycle):
+		self.trace.append([cycle, addr])
 		return self.mem[addr]
 
 	def dump(self):
 		for m in self.mem:
 			print(m)
+
+	def showTraces(self):
+		x = [t[0] for t in self.trace]
+		y = [t[1] for t in self.trace]
+		plt.title("Memory Accesses v/s Cycles")
+		plt.xlabel("Cycle")
+		plt.ylabel("Address")
+
+		plt.scatter(x, y)
+		plt.autoscale(enable=True, axis='both', tight=True)
+		
+		plt.ylim([0, 255])
+		plt.yticks([10*i for i in range(26)])
+		plt.xlim(0)
+		plt.savefig("pattern.png")

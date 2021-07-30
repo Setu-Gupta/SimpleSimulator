@@ -11,15 +11,18 @@ def main():
 	executionEngine = ExecutionEngine(memory, registerFile)
 	PC = ProgramCounter(0)
 	halted = False
+	cycle = 0
 
 	while not halted:
-		inst = memory.fetch(PC.getVal())
-		halted, nextPC = executionEngine.execute(inst)
+		inst = memory.fetch(PC.getVal(), cycle)
+		halted, nextPC = executionEngine.execute(inst, cycle)
 		PC.dump()
 		registerFile.dump()
 		PC.update(nextPC)
+		cycle += 1
 
 	memory.dump()
+	memory.showTraces()
 
 if __name__ == '__main__':
 	main()
