@@ -12,42 +12,48 @@ class ExecutionEngine:
 		self.registerFile = rf
 
 	def handleAdd(self, inst):
-		reg1 = binAndDec(inst[7:10])
-		reg2 = binAndDec(inst[10:13])
-		reg3 = binAndDec(inst[13:])
+		reg1 = binToDec(inst[7:10])
+		reg2 = binToDec(inst[10:13])
+		reg3 = binToDec(inst[13:])
 
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val + reg3Val
 
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 		if(reg1Val > 255):
 			self.registerFile.setFlag("V")
 
 	def handleSub(self, inst):
-		reg1 = binAndDec(inst[7:10])
-		reg2 = binAndDec(inst[10:13])
-		reg3 = binAndDec(inst[13:])
+		reg1 = binToDec(inst[7:10])
+		reg2 = binToDec(inst[10:13])
+		reg3 = binToDec(inst[13:])
 
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = max(0, reg2Val - reg3Val)
 
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 		if(reg3Val > reg2Val):
 			self.registerFile.setFlag("V")
 
 	def handleMovImm(self, inst):
-		reg1 = binAndDec(inst[5:8])
-		imm = binAndDec(inst[8:])
+		reg1 = binToDec(inst[5:8])
+		imm = binToDec(inst[8:])
 
 		self.registerFile.update(reg1, imm)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 
 	def handleMovReg(self, inst):
-		pass
+		reg1 = binToDec(inst[10:13])
+		reg2 = binToDec(inst[13:])
+
+		reg2Val = self.registerFile.fetch(reg2)
+
+		self.registerFile.update(reg1, reg2Val)
+		self.registerFile.resetAllFlags()
 	
 	def handleLd(self, inst):
 		pass
@@ -56,16 +62,16 @@ class ExecutionEngine:
 		pass
 
 	def handleMul(self, inst):
-		reg1 = binAndDec(inst[7:10])
-		reg2 = binAndDec(inst[10:13])
-		reg3 = binAndDec(inst[13:])
+		reg1 = binToDec(inst[7:10])
+		reg2 = binToDec(inst[10:13])
+		reg3 = binToDec(inst[13:])
 
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val * reg3Val
 
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 		if(reg1Val > 255):
 			self.registerFile.setFlag("V")
 
@@ -73,66 +79,87 @@ class ExecutionEngine:
 		pass
 
 	def handleRs(self, inst):
-		reg1 = binAndDec(inst[5:8])
-		imm = binAndDec(inst[8:])
+		reg1 = binToDec(inst[5:8])
+		imm = binToDec(inst[8:])
 
 		reg1Val = self.registerFile.fetch(reg1)
 		reg1Val >>= imm
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 
 	def handleLs(self, inst):
-		reg1 = binAndDec(inst[5:8])
-		imm = binAndDec(inst[8:])
+		reg1 = binToDec(inst[5:8])
+		imm = binToDec(inst[8:])
 
 		reg1Val = self.registerFile.fetch(reg1)
 		reg1Val <<= imm
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 
 
 	def handleXor(self, inst):
-		reg1 = binAndDec(inst[7:10])
-		reg2 = binAndDec(inst[10:13])
-		reg3 = binAndDec(inst[13:])
+		reg1 = binToDec(inst[7:10])
+		reg2 = binToDec(inst[10:13])
+		reg3 = binToDec(inst[13:])
 
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val ^ reg3Val
 
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 
 	def handleOr(self, inst):
-		reg1 = binAndDec(inst[7:10])
-		reg2 = binAndDec(inst[10:13])
-		reg3 = binAndDec(inst[13:])
+		reg1 = binToDec(inst[7:10])
+		reg2 = binToDec(inst[10:13])
+		reg3 = binToDec(inst[13:])
 
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val | reg3Val
 
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 
 
 	def handleAnd(self, inst):
-		reg1 = binAndDec(inst[7:10])
-		reg2 = binAndDec(inst[10:13])
-		reg3 = binAndDec(inst[13:])
+		reg1 = binToDec(inst[7:10])
+		reg2 = binToDec(inst[10:13])
+		reg3 = binToDec(inst[13:])
 
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val & reg3Val
 
 		self.registerFile.update(reg1, reg1Val)
-		self.registerFile.resetAllFLags()
+		self.registerFile.resetAllFlags()
 
 	def handleNot(self, inst):
-		pass
+		reg1 = binToDec(inst[10:13])
+		reg2 = binToDec(inst[13:])
 
+		reg2Val = self.registerFile.fetch(reg2)
+		reg2ValBin = decToBin(reg2Val, 16)
+		reg1ValBin = "".join(["0" if c == "1" else "1" for c in reg2ValBin])
+		reg1Val  = binToDec(reg1ValBin)
+
+		self.registerFile.update(reg1, reg1Val)
+		self.registerFile.resetAllFlags()
+		
 	def handleCmp(self, inst):
-		pass
+		reg1 = binToDec(inst[10:13])
+		reg2 = binToDec(inst[13:])
+
+		reg1Val = self.registerFile.fetch(reg1)
+		reg2Val = self.registerFile.fetch(reg2)
+
+		self.registerFile.resetAllFlags()
+		if(reg1Val == reg2Val):
+			self.registerFile.setFlag("E")
+		elif(reg1Val > reg2Val):
+			self.registerFile.setFlag("G")
+		else:
+			self.registerFile.setFlag("L")
 
 	def handleJmp(self, inst):
 		pass
