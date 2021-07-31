@@ -10,3 +10,6 @@ Execute the `run` file. Pass the binary via `stdin`. The output is written to `s
 ```sh
 $ ./run < path/to/binary > path/to/dump
 ```
+
+## How to view the memory access pattern
+The generated pattern is stored as a `.png` file in the root directory.
