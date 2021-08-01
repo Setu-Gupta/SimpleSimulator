@@ -6,7 +6,7 @@ class ProgramCounter:
 	count = 0
 
 	def __init__(self, init):
-		self.count = 0
+		self.count = init
 
 	def getVal(self):
 		return self.count
