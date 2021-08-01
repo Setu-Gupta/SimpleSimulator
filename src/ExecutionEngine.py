@@ -59,7 +59,7 @@ class ExecutionEngine:
 		reg1 = binToDec(inst[5:8])
 		addr = binToDec(inst[8:])
 
-		reg1Val = self.memory.fetch(addr, cycle)
+		reg1Val = int(self.memory.fetch(addr, cycle))
 
 		self.registerFile.update(reg1, reg1Val)
 		self.registerFile.resetAllFlags()
