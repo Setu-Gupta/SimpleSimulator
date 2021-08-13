@@ -19,7 +19,7 @@ class ExecutionEngine:
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val + reg3Val
-		if(reg1Val > 255):
+		if(reg1Val > (2**16-1)):
 			self.registerFile.setFlag("V")
 			reg1Val &= (2**16 - 1)
 
@@ -83,7 +83,7 @@ class ExecutionEngine:
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val * reg3Val
-		if(reg1Val > 255):
+		if(reg1Val > (2**16-1)):
 			self.registerFile.setFlag("V")
 			reg1Val &= (2**16 - 1)
 
