@@ -19,11 +19,12 @@ class ExecutionEngine:
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val + reg3Val
+		if(reg1Val > 255):
+			self.registerFile.setFlag("V")
+			reg1Val &= (2**16 - 1)
 
 		self.registerFile.update(reg1, reg1Val)
 		self.registerFile.resetAllFlags()
-		if(reg1Val > 255):
-			self.registerFile.setFlag("V")
 
 	def handleSub(self, inst):
 		reg1 = binToDec(inst[7:10])
@@ -82,11 +83,12 @@ class ExecutionEngine:
 		reg2Val = self.registerFile.fetch(reg2)
 		reg3Val = self.registerFile.fetch(reg3)
 		reg1Val = reg2Val * reg3Val
+		if(reg1Val > 255):
+			self.registerFile.setFlag("V")
+			reg1Val &= (2**16 - 1)
 
 		self.registerFile.update(reg1, reg1Val)
 		self.registerFile.resetAllFlags()
-		if(reg1Val > 255):
-			self.registerFile.setFlag("V")
 
 	def handleDiv(self, inst):
 		reg1 = binToDec(inst[10:13])
