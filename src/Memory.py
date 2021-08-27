@@ -44,17 +44,23 @@ class Memory:
 		plt.title("Memory Accesses v/s Cycles")
 		plt.xlabel("Cycle")
 		plt.ylabel("Address")
-
+		# plt.figure(figsize=(16,10))
 		plt.scatter(x, y)
-		plt.autoscale(enable=True, axis='both', tight=True)
+		plt.autoscale(enable=True, axis='both', tight = False)
 		
-		if(max(y) > 25):
-			yNumTicks = 25
+		if(max(y) > 40):
+			yNumTicks = 10
 			yStepSize = max(y) // yNumTicks
-			plt.yticks([yStepSize*i for i in range(yNumTicks+25)])
+			plt.yticks([yStepSize*i for i in range(yNumTicks+10)])
+			
 		else:
-			plt.yticks([i for i in range(max(y)+1)])
-		plt.xticks([i*20 for i in range((max(x)+20))//20])
+			plt.yticks([i for i in range(max(y)+2)])
+			
+		
+		if (max(x)> 50):
+			plt.xticks([i*20 for i in range((max(x)+20)//20)])
+		else:
+			plt.xticks([i for i in range(max(x)+2)])
 		plt.xlim(0)
 		plt.ylim(0)
 		plt.savefig("pattern.png")
