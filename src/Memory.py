@@ -51,8 +51,10 @@ class Memory:
 		if(max(y) > 25):
 			yNumTicks = 25
 			yStepSize = max(y) // yNumTicks
-			plt.yticks([yStepSize*i for i in range(yNumTicks+1)])
+			plt.yticks([yStepSize*i for i in range(yNumTicks+25)])
 		else:
 			plt.yticks([i for i in range(max(y)+1)])
+		plt.xticks([i*20 for i in range((max(x)+20))//20])
 		plt.xlim(0)
+		plt.ylim(0)
 		plt.savefig("pattern.png")
