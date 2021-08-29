@@ -268,6 +268,7 @@ class ExecutionEngine:
 		elif opcode == "10010": # je mem_addr
 			newPC = self.handleJe(inst)
 		elif opcode == "10011": # hlt
+			self.registerFile.resetAllFlags()
 			halted = True
 
 		return halted, newPC
